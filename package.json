@@ -1,0 +1,25 @@
+{
+  "name": "das-verify-bot",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "watch": "nodemon -L --watch src",
+    "start": "node src/index.js",
+    "format": "prettier --write \"src/**/*.js\""
+  },
+  "keywords": [],
+  "author": "comdex",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "@sapphire/framework": "^2.1.4",
+    "das-sdk": "^0.4.1",
+    "discord.js": "^13.3.1"
+  },
+  "devDependencies": {
+    "@sapphire/prettier-config": "^1.2.4",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.4.1"
+  },
+  "prettier": "@sapphire/prettier-config"
+}
