@@ -4,6 +4,7 @@ This is a js discord bot to verify the user's DAS account.
 
 # Install
 
+requirements: node.js 16.6.0 or newer
 ```bash
 npm install
 ```
