@@ -1,5 +1,8 @@
 const { LogLevel, SapphireClient } = require('@sapphire/framework');
+const path = require('path');
+const LocalStorage = require('node-localstorage').LocalStorage;
 const { prefix, token } = require('../config.json');
+
 
 const client = new SapphireClient({ 
 	defaultPrefix: prefix,
@@ -11,9 +14,9 @@ const client = new SapphireClient({
 	intents: ['GUILDS', 'GUILD_MESSAGES'] ,
 });
 
-const { verifyRole } = require('../store.json');
-global.verifyRole = verifyRole;
-
+const storeDir = path.resolve(__dirname, '../store');
+let localStorage = new LocalStorage(storeDir);
+global.localStorage = localStorage;
 
 const main = async () => {
 	try {

@@ -14,7 +14,8 @@
   "dependencies": {
     "@sapphire/framework": "^2.1.4",
     "das-sdk": "^0.4.1",
-    "discord.js": "^13.3.1"
+    "discord.js": "^13.3.1",
+    "node-localstorage": "^2.2.1"
   },
   "devDependencies": {
     "@sapphire/prettier-config": "^1.2.4",

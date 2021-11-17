@@ -1,46 +1,50 @@
 const { Command } = require('@sapphire/framework');
 const { Permissions } = require('discord.js');
-const fs = require('fs');
-const path = require('path');
 
 module.exports = class PingCommand extends Command {
   constructor(context, options) {
     super(context, {
       ...options,
       aliases: ['svr'],
-      description: 'set verify role, only admin can operate'
+	  flags: ['help', 'h'],
+      description: 'Set verify role, only admin can operate. eg: !set_verify_role [roleName]'
     });
   }
 
   async messageRun(message, args) {
 	let user = message.author;
+	console.log("user: ", user.tag);
+	
+	const isRequestHelp = args.getFlags('help', 'h');
+	if(isRequestHelp) {
+		return message.reply(`${this.description}`);
+	}
 	
 	let roleName;
 	try {
-		roleName = await args.pick('string');
+		roleName = await args.rest('string');
 		console.log({roleName});
 	} catch(err) {
-		return message.reply(`${user} please input role name!`);
+		return message.reply(`${user} Error: Please input role name!`);
 	}
-	
-	let member = message.member;
-	if (!member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
-		return message.reply(`${user} Set verify role failed! Only admin can operate.`);
+
+	if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+		return message.reply(`${user} Error: Set verify role failed! Only admin can operate.`);
 	}
-	
-	global.verifyRole = roleName;
 	
 	try {
-		const storeFile = path.resolve(__dirname, '../../store.json');
-		const storeData = fs.readFileSync(storeFile, 'UTF-8').toString();
-		let storeObj = JSON.parse(storeData);
-		storeObj.verifyRole = roleName;
-		fs.writeFileSync(storeFile, JSON.stringify(storeObj));
+		const role = message.guild.roles.cache.find(role => role.name === roleName);
+		console.log({role});
+		if(!role) {
+			return message.reply(`${user} Error: The role can not be found: ${roleName}`);
+		}
+		
+		global.localStorage.setItem(message.guild.id, roleName);
+		
 	} catch(err) {
 		console.log(err);
-		return message.reply(`${user} Set verify role failed! Internal Server exception.`);
+		return message.reply(`${user} Error: Internal Server exception.`);
 	}
-	
 	
 	return message.reply(`${user} Set verify role successfully!`);
 	
