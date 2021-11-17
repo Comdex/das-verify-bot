@@ -2,7 +2,9 @@ diff
 .idea/*
 build
 node_modules
+store
 test
 coverage
+config.json
 *.log
 yarn.lock
