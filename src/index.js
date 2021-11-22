@@ -1,8 +1,6 @@
 const { LogLevel, SapphireClient } = require('@sapphire/framework');
-const path = require('path');
-const LocalStorage = require('node-localstorage').LocalStorage;
 const { prefix, token } = require('../config.json');
-
+const { DasUser, GuildConfig } = require('./db/orm.js');
 
 const client = new SapphireClient({ 
 	defaultPrefix: prefix,
@@ -11,12 +9,16 @@ const client = new SapphireClient({
 		level: LogLevel.Debug
 	},
 	shards: 'auto',
-	intents: ['GUILDS', 'GUILD_MESSAGES'] ,
+	intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES'] ,
+	partials: ["CHANNEL"]
 });
 
-const storeDir = path.resolve(__dirname, '../store');
-let localStorage = new LocalStorage(storeDir);
-global.localStorage = localStorage;
+client.once('ready', () => {
+    console.log("db sync start");
+	DasUser.sync();
+	GuildConfig.sync();
+	console.log("db sync end")
+});
 
 const main = async () => {
 	try {

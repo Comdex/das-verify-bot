@@ -1,0 +1,5 @@
+const CONFIG_VERIFY_ROLE = "verify_role";
+const CONFIG_LEVEL_ROLE_INFO = "level_role_info";
+
+exports.CONFIG_VERIFY_ROLE = CONFIG_VERIFY_ROLE;
+exports.CONFIG_LEVEL_ROLE_INFO = CONFIG_LEVEL_ROLE_INFO;

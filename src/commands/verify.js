@@ -1,6 +1,8 @@
 const { Command } = require('@sapphire/framework');
 const { Das } = require('das-sdk');
 const { dasIndexer } = require('../../config.json');
+const { GuildConfig } = require('../db/orm.js');
+const { CONFIG_VERIFY_ROLE } = require('../constant/config_key.js');
 
 const das = new Das({
   url: dasIndexer,
@@ -45,20 +47,24 @@ Steps to verify your DAS account:
 		return message.reply(`${user} Error: Please input your DAS account!${this.description}`);
 	}
 	
+	account = account.trim().toLowerCase();
+	
 	if(!account.endsWith(".bit")) {
 		return message.reply(`${user} Error: Non-existent account!${this.description}`);
 	}
 	
 	let records;
+	
 	try {
 		records = await das.records(account, 'profile.discord');
-		if(!records || records.length == 0) {
+		
+		if(!records || records.length === 0) {
 			return message.reply(`${user} Error: Your discord user name(eg: xxx#1021) is not set on this DAS account!${this.description}`);
 		}
+		
 	} catch(err) {
 		return message.reply(`${user} Error: This DAS account cannot be found: ${account}`);
 	}
-	
 	
 	let isSet = records.some((r) => {
 		return r.value.trim() === user.tag;
@@ -67,18 +73,18 @@ Steps to verify your DAS account:
 		return message.reply(`${user} Error: Your discord user name(eg: xxx#1021) is not set on this DAS account!${this.description}`);
 	}
 	
-	let verifyRole = global.localStorage.getItem(message.guild.id);
-	if(!verifyRole) {
+	const verifyRoleConfig = await GuildConfig.findOne({ where: { guild_id: message.guild.id, key: CONFIG_VERIFY_ROLE } });
+	if(!verifyRoleConfig) {
 		return message.reply(`${user} Error: The administrator has not set the corresponding verification role!`);
 	}
 	
 	let member = message.member;
-	if (member.roles.cache.some(role => role.name === verifyRole)) {
+	if (member.roles.cache.some(role => role.name === verifyRoleConfig.value)) {
 		return message.reply(`${user} You have passed the verification! Please do not repeat the verification.`);
 	}
 	
 	try {
-		const role = message.guild.roles.cache.find(role => role.name === verifyRole);
+		const role = message.guild.roles.cache.find(role => role.name === verifyRoleConfig.value);
 		console.log({role});
 		await member.roles.add(role);
 	} catch(err) {

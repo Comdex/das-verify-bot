@@ -1,5 +1,7 @@
 const { Command } = require('@sapphire/framework');
 const { Permissions } = require('discord.js');
+const { GuildConfig } = require('../db/orm.js');
+const { CONFIG_VERIFY_ROLE } = require('../constant/config_key.js');
 
 module.exports = class PingCommand extends Command {
   constructor(context, options) {
@@ -39,7 +41,18 @@ module.exports = class PingCommand extends Command {
 			return message.reply(`${user} Error: The role can not be found: ${roleName}`);
 		}
 		
-		global.localStorage.setItem(message.guild.id, roleName);
+		const verifyRoleConfig = await GuildConfig.findOne({ where: { guild_id: message.guild.id, key: CONFIG_VERIFY_ROLE } });
+		if(verifyRoleConfig) {
+			verifyRoleConfig.value = roleName;
+			await verifyRoleConfig.save();
+		} else {
+			await GuildConfig.create({
+				guild_id: message.guild.id,
+				key: CONFIG_VERIFY_ROLE,
+				guild_name: message.guild.name,
+				value: roleName,
+			});
+		}
 		
 	} catch(err) {
 		console.log(err);
