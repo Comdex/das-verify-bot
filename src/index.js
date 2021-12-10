@@ -1,6 +1,6 @@
 const { LogLevel, SapphireClient } = require('@sapphire/framework');
 const { prefix, token } = require('../config.json');
-const { DasUser, GuildConfig } = require('./db/orm.js');
+const { DasUser, GuildConfig, NFTRoleConfig } = require('./db/orm.js');
 
 const client = new SapphireClient({ 
 	defaultPrefix: prefix,
@@ -17,7 +17,7 @@ client.once('ready', () => {
     console.log("db sync start");
 	DasUser.sync();
 	GuildConfig.sync();
-	console.log("db sync end")
+	NFTRoleConfig.sync();
 });
 
 const main = async () => {

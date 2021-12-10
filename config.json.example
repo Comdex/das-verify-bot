@@ -1,0 +1,9 @@
+{
+	"token": "fill in your token",
+	"prefix": "!",
+	"dasIndexer": "https://indexer.da.systems",
+	"mibao": {
+		"key": "mibao open api key",
+		"secret": "mibao open api secret"
+	}
+}

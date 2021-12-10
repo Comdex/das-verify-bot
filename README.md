@@ -11,6 +11,6 @@ npm install
 
 # Usage
 
-1. Fill in your configuration parameters in config.json.
+1. Fill in your configuration parameters in config.json.example and rename to config.json
 2. npm install -g pm2
 3. sh start.sh

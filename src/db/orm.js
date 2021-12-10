@@ -48,5 +48,26 @@ const GuildConfig = sequelize.define('GuildConfig', {
 	value: DataTypes.TEXT,
 });
 
+const NFTRoleConfig = sequelize.define('NFTRoleConfig', {
+	guild_id: {
+		type: DataTypes.STRING,
+	    unique: 'nftRoleConfigIndex',
+		allowNull: false,
+	},
+	nft_platform: {
+		type: DataTypes.STRING,
+		unique: 'nftRoleConfigIndex',
+		allowNull: false,
+	},
+	nft_contract: {
+		type: DataTypes.STRING,
+		unique: 'nftRoleConfigIndex',
+		allowNull: false,
+	},
+	guild_name: DataTypes.STRING,
+	role_name: DataTypes.TEXT,
+});
+
 exports.DasUser = DasUser;
 exports.GuildConfig = GuildConfig;
+exports.NFTRoleConfig = NFTRoleConfig;
