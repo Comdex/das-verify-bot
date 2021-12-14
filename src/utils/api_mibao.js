@@ -44,12 +44,33 @@ async function getNervosNFTs(ckbAddress) {
 	  console.log("valid ckb address");
 	  const tokenList = (await getMibaoAssets(ckbAddress)).data.token_list;
 	  
-	  console.log(JSON.stringify(tokenList));
+	  console.log("tokenlist: " + JSON.stringify(tokenList));
 	  return tokenList;
 	} else {
 	  return [];
 	}
 }
 
+async function checkMibaoUser(ckbAddress, discordUserName) {
+	try {
+	    const response = await Axios.get('https://api.jinse.cc/api/wallet/v1/users/' + ckbAddress);
+	    console.log(response.data);
+		
+		if(response.data.nickname) {
+			let desc = response.data.description;
+			if(desc) {
+				if(desc.trim() == discordUserName.trim()) {
+					return true;
+				}
+			}
+		} 
+		
+	} catch (error) {
+	    console.error(error);
+	}
+	return false;
+}
+
 exports.getNervosNFTs = getNervosNFTs;
+exports.checkMibaoUser = checkMibaoUser;
 
