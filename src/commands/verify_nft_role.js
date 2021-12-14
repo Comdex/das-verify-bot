@@ -24,9 +24,13 @@ Steps to get NFT Role by verify DAS Account:
     Type:  Profile
     Key:  Discord
     Discord:  Please input your Discord Username (eg:  xxx#xxx)
-    Save and wait a few minutes.
-3. Change the description of your Mibao profile(https://mibao.net/profile) to your Discord Username(xxx#xxx).
-3. Input in the current channel:  !verify_nft_role [Your DAS account for Discord parsing records was added]
+3. Add a parsing record.
+    Type:  Address
+	Main Chain:  CKB
+	Address: Please input your Mibao ckb address(Make sure this address has the specified Nervos NFT)
+	Save and wait a few minutes.
+4. Change the description of your Mibao profile(https://mibao.net/profile) to your Discord Username(xxx#xxx).
+5. Input in the current channel:  !verify_nft_role [Your DAS account for Discord parsing records was added]
     eg:  !verify_nft_role das.bit
 `
     });
@@ -130,7 +134,7 @@ Steps to get NFT Role by verify DAS Account:
 	if(addRoleCount > 0) {
 		return message.reply(`${user} Congratulations! You successfully acquired the NFT role through your DAS account: ${account}`);
 	} else {
-		return message.reply(`${user} Failed! You can not get a NFT role.`);
+		return message.reply(`${user} Failed! You can not get a NFT role. Please check if your mibao ckb address has the specified Nervos NFT.${this.description}`);
 	}
 	
 	
