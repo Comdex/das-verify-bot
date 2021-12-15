@@ -1,7 +1,7 @@
 const { Command } = require('@sapphire/framework');
 const { Das } = require('das-sdk');
 const { dasIndexer } = require('../../config.json');
-const { GuildConfig, NFTRoleConfig } = require('../db/orm.js');
+const { GuildConfig, NFTRoleConfig, DasUser } = require('../db/orm.js');
 const { CONFIG_VERIFY_ROLE } = require('../constant/config_key.js');
 const { getNervosNFTs, checkMibaoUser } = require("../utils/api_mibao.js");
 
@@ -90,6 +90,25 @@ Steps to get NFT Role by verify DAS Account:
 	let addRoleCount = 0;
 	
 	try {
+		let dasUser = await DasUser.findOne({ where: { guild_id: message.guild.id, user_id: message.author.id, } });
+		if(dasUser) {
+			dasUser.das_account = account;
+			dasUser.owner_address = DASAccount.owner_address;
+			dasUser.owner_address_chain = DASAccount.owner_address_chain;
+			dasUser.save();
+		} else {
+			DasUser.create({
+				guild_id: message.guild.id,
+				user_id: message.author.id,
+				guild_name: message.guild.name,
+				user_tag: message.author.tag,
+				das_account: account,
+				owner_address: DASAccount.owner_address,
+				owner_address_chain: DASAccount.owner_address_chain,
+				das_own_count: 0,
+			});
+		}
+		
 		for(let i=0; i<ckbAddressArr.length; i++) {
 			let ckbAddress = ckbAddressArr[i].value;
 			console.log(`ckb address: ${ckbAddress}`);

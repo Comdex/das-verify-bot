@@ -62,7 +62,7 @@ Steps to get a vip role:
 		records = DASAccount.records.filter((record) => record.key === 'profile.discord');
 		
 		if(!records || records.length === 0) {
-			return message.reply(`${user} Error: Your discord user name(eg: xxx#1021) is not set on this DAS account!${this.description}`);
+			return message.reply(`${user} Error: Your discord user name(${user.tag}) is not set on this DAS account!${this.description}`);
 		}
 		
 	} catch(err) {
@@ -73,7 +73,7 @@ Steps to get a vip role:
 		return r.value.trim() === user.tag;
 	});
 	if(!isSet) {
-		return message.reply(`${user} Error: Your discord user name(eg: xxx#1021) is not set on this DAS account!${this.description}`);
+		return message.reply(`${user} Error: Your discord user name(${user.tag}) is not set on this DAS account!${this.description}`);
 	}
 	
 	try {
