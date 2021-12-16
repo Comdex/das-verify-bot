@@ -35,17 +35,30 @@ const axios = Axios.create({
 
 axios.interceptors.request.use(mibaoAuthInterceptor);
 
-function getMibaoAssets (address) {
-  return axios.get(`/api/v1/indexer/holder_tokens/${address}`);
+function getMibaoAssets (address, page) {
+  return axios.get(`/api/v1/indexer/holder_tokens/${address}?page=${page}&limit=20`);
 }
 
 async function getNervosNFTs(ckbAddress) {
 	if (ckbAddress.match(/(ckb|ckt)1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{42,}/)) {
 	  console.log("valid ckb address");
-	  const tokenList = (await getMibaoAssets(ckbAddress)).data.token_list;
+	  let allNFTs = [];
+	  const data = (await getMibaoAssets(ckbAddress, 1)).data;
+	  const tokenList = data.token_list;
+	  allNFTs = allNFTs.concat(tokenList);
+	  console.log("meta data: " + JSON.stringify(data.meta));
 	  
-	  console.log("tokenlist: " + JSON.stringify(tokenList));
-	  return tokenList;
+	  let maxPage = data.meta.max_page;
+	  if(maxPage > 1) {
+		  console.log("maxPage > 1");
+		 for(let i=2; i<=maxPage; i++) {
+			 const pageTokenList = (await getMibaoAssets(ckbAddress, i)).data.token_list;
+			 allNFTs = allNFTs.concat(pageTokenList);
+		 } 
+	  }
+	  
+	  console.log("tokenlist length: " + allNFTs.length);
+	  return allNFTs;
 	} else {
 	  return [];
 	}

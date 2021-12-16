@@ -117,6 +117,7 @@ Steps to get NFT Role by verify DAS Account:
 				ownedMibaoCkbAddressArr.push(ckbAddress);
 			}
 		}
+		console.log("ownedMibaoCkbAddressArr: " + JSON.stringify(ownedMibaoCkbAddressArr));
 		
 		let ownedNFTList = [];
 		for(let i=0; i<ownedMibaoCkbAddressArr.length; i++) {
@@ -128,7 +129,7 @@ Steps to get NFT Role by verify DAS Account:
 		console.log("ownedNFTList: " + JSON.stringify(ownedNFTList));
 		
 		const nftRoleConfigs = await NFTRoleConfig.findAll({ where: { guild_id: message.guild.id } });
-		console.log("nftRoleConfigs: " + JSON.stringify(nftRoleConfigs));
+		console.log("nftRoleConfigs length: " + nftRoleConfigs.length);
 		if(!nftRoleConfigs || nftRoleConfigs.length <= 0) {
 			return message.reply(`${user} Error: The administrator does not set any NFT roles`);
 		}
